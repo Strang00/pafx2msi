@@ -84,7 +84,7 @@ def parse_paf(filexml):
     root = tree.getroot()
     
     result = {}
-    manufacturer = root.find('Manufacturer').text
+    manufacturer = root.find('Manufacturer').text or 'Unknown'
     name = root.find('Name').text    
     version = root.find('Version').text    
     print('PAF have antenna', manufacturer, name)
