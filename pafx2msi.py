@@ -1,4 +1,4 @@
-VERSION   = 'PAFX2MSI Strang\'s convertor v1.0'
+VERSION   = 'PAFX2MSI Strang\'s convertor v1.1'
 COMMENT   = 'Converts antenna patterns from PAFX format to MSI format'
 USAGE     = 'Usage: pafx2msi.py [-h|--help] [data/*.pafx]'
 COPYRIGHT = '(c) 2024 Sergey Arkhipov'
@@ -84,9 +84,9 @@ def parse_paf(filexml):
     root = tree.getroot()
     
     result = {}
-    manufacturer = root.find('Manufacturer').text or 'Unknown'
-    name = root.find('Name').text    
-    version = root.find('Version').text    
+    name = root.find('Name').text
+    manufacturer = root.find('Manufacturer').text or 'NoVendor' if root.find('Manufacturer') else 'NoVendor'
+    version = root.find('Version').text or 'NoVersion' if root.find('Version') else 'NoVersion'
     print('PAF have antenna', manufacturer, name)
     
     for p in root.iter('Pattern'):
@@ -117,13 +117,15 @@ def read_pafx(filepath, save_msi=True):
     #print(zipfile.ZipFile(filepath).namelist())
     with zipfile.ZipFile(filepath) as zip:
         with zip.open('antenna.paf') as file_paf:
-            antenna,dict_pap = parse_paf(file_paf)
-        for file,descr in dict_pap.items():
+            antenna, dict_pap = parse_paf(file_paf)
+        if not antenna:
+            antenna = os.path.basename(filepath).replace('.pafx','')
+        for file, descr in dict_pap.items():
             with zip.open(file) as file_pap:
                 parse_pap(file_pap, descr)
     print(f'Loaded {len(dict_pap)} patterns for {antenna}')
     if (save_msi):
-        dirname = os.path.dirname(filepath)
+        dirname = os.path.dirname(filepath) or '.'
         write_msi(dirname + '/' + antenna, dict_pap)
     return antenna, dict_pap
 

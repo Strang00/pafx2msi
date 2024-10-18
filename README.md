@@ -3,7 +3,7 @@
 Antenna pattern convertor from PAFX to MSI format wtitten with python3.
 
 
-* PAFX is ZIP archive with XML files: index `antenna.pap` and PAP-patterns `*.pap`.
+* PAFX is ZIP archive with XML files: index `antenna.paf` and PAP-patterns `*.pap`.
 * Each PAP-pattern converted to separate MSI file with frequency and tilt in suffix.
 
 
@@ -38,6 +38,9 @@ See also [python_antenna_pattern] which allows to plot charts for MSI patterns:
 
 
 ## History
+### v1.1 2024-10-18
+- Dispatched NoVendor and NoVersion
+- Dispatched current folder path
 ### v1.0 2024-06-10
 - Created and tested convertor on several PAFX
 - Added frequency and tilt to result files names
